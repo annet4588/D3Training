@@ -1,23 +1,47 @@
 var dataArray = [5,11,18];
+// Array of labels
+var dataDays = ['Mon', 'Wed', 'Fri'];
+// Colour bars
+var rainbow = d3.scaleSequential(d3.interpolateRainbow).domain([0, 10]);
+// Colour circles
+var rainbow2 = d3.scaleSequential(d3.interpolateRainbow).domain([0, 3]);
+
+var x = d3.scaleBand()
+          .domain(dataDays)
+          .range([0,170])
+          .paddingInner(0.1176);
+
+var xAxis = d3.axisBottom(x);
+
 
 var svg = d3.select("body").append("svg")
   .attr("height", "400")
   .attr("width", "1800");
+
+//Colour range
+var cat20 = d3.schemeCategory20;
+console.log(cat20);
 
 svg.selectAll("rect")
    .data(dataArray)
    .enter().append("rect")
             .attr("height", d => d * 15)
             .attr("width", "50")
-            .attr("fill", "pink")
+            .attr("fill", (d,i)=> rainbow(i))
             .attr("x", (d,i)=> 60 * i) //d - data point(5,11,18), i - index
             .attr("y", d => 300 - (d * 15));
+
+svg.append("g")
+    .attr("class", "x axis hidden")
+    .attr("transform", "translate(0, 300)")
+    .call(xAxis);
 
 var newX = 300;
 svg.selectAll("circle.first")
    .data(dataArray)
    .enter().append("circle")
             .attr("class", "first")
+            .attr("fill", (d,i)=> rainbow2(i))
             .attr("cx", (d,i) => newX+=(d*3) + (i*20))
             .attr("cy", "100")
             .attr("r", d=> d*3);
@@ -27,6 +51,7 @@ svg.selectAll("ellipse")
    .data(dataArray)
    .enter().append("ellipse")
             .attr("class", "second")
+            .attr("fill", (d,i)=> cat20[i])
             .attr("cx", (d,i) => newX+=(d*3) + (i*20))
             .attr("cy", "100")
             .attr("rx", d=> d*3)
