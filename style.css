@@ -1,5 +1,16 @@
+html, body{
+    margin:0;
+    height: 100%;
+}
+
 line{
     stroke: red;
+}
+
+path {
+    stroke: green;
+    stroke-width: 2;
+    fill:none;
 }
 
 g.group0 path,
