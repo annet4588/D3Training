@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3Training</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="d3.v4.js"></script>
+    <style>
+    g.polygons path {
+        fill: white;
+        stroke: lightsteelblue;
+    }
+    g.fuel circle{
+        fill: steelblue;
+    }
+    </style>
+
+</head>
+<body>
+    <!-- To being able to select an element from the body -->
+    <script type="text/javascript">
+
+        var width = 960;
+        var height = 500;
+
+        var vertices = d3.range(100).map(function(d){return [Math.random()*width, Math.random()*height]});
+        var voronoi = d3.voronoi().extent([[0,0],[width, height]]);
+        var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+
+        // To see the circles - place the polygons element before the circles - in this order
+        svg.append("g").attr("class", "polygons")
+            .selectAll("path")
+              .data(voronoi.polygons(vertices))
+              .enter().append("path")
+                      .attr("d", function(d){ return d ? "M" + d.join("L") + "Z" : null; })
+         svg.append("g").attr("class", "fuel")
+            .selectAll("circle")
+            .data(vertices)
+            .enter().append("circle")
+                .attr("cx", function(d){ return d[0]; })
+                .attr("cy", function(d){ return d[1]; })
+                .attr("r", 2.5);
+                       
+    </script>
+   
+</body>
+</html>
